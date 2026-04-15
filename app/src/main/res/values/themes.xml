@@ -1,0 +1,16 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.CodBenchmarker" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="Theme.CodBenchmarker" parent="Base.Theme.CodBenchmarker" />
+
+        <style name="Theme.CODBenchmarker" parent="Theme.Material3.DayNight.NoActionBar">
+            <item name="colorPrimary">#00FF41</item>
+            <item name="android:statusBarColor">#0A0A0A</item>
+            <item name="android:windowBackground">#0A0A0A</item>
+        </style>
+
+</resources>
