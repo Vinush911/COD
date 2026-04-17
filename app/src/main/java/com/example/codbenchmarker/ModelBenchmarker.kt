@@ -3,6 +3,10 @@ package com.example.codbenchmarker
 import android.util.Log
 import android.graphics.Bitmap
 
+/**
+ * ARCHITECT CLEANUP: This file now ONLY contains the Benchmarker logic.
+ * Duplicate 'OverlayView' has been purged to resolve the 'Redeclaration' error.
+ */
 object ModelBenchmarker {
     private const val TAG = "MLPerf_Terminal"
 
@@ -11,15 +15,14 @@ object ModelBenchmarker {
         Log.i(TAG, "-".repeat(60))
 
         images.forEachIndexed { index, bitmap ->
-            Runtime.getRuntime().gc() // Force garbage collection before test
-            val startMemory = getUsedMemory()
+            Runtime.getRuntime().gc()
+            val startMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()
             val startTime = System.nanoTime()
 
-            // Pass the bitmap to the AI
             inferenceBlock(bitmap)
 
             val endTime = System.nanoTime()
-            val endMemory = getUsedMemory()
+            val endMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()
 
             val latencyMs = (endTime - startTime) / 1_000_000.0
             val fps = if (latencyMs > 0) 1000.0 / latencyMs else 0.0
@@ -27,11 +30,5 @@ object ModelBenchmarker {
 
             Log.i(TAG, String.format("Image %-6d | %-15.2f | %-10.2f | %-15.2f", index + 1, latencyMs, fps, memoryUsedMb))
         }
-        Log.i(TAG, "-".repeat(60))
-    }
-
-    private fun getUsedMemory(): Long {
-        val runtime = Runtime.getRuntime()
-        return runtime.totalMemory() - runtime.freeMemory()
     }
 }
