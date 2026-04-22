@@ -1,8 +1,6 @@
 package com.example.codbenchmarker
 
 import android.os.Bundle
-import android.graphics.*
-import android.util.Log
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +9,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import java.util.concurrent.Executors
+import android.util.Log
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,6 +17,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var overlay: OverlayView
     private lateinit var fpsView: TextView
     private lateinit var latencyView: TextView
+    private lateinit var ramView: TextView
+
+    private var frameCount = 0
+    private var lastFpsTimestamp = System.currentTimeMillis()
+    private var currentFps = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,9 +31,9 @@ class MainActivity : AppCompatActivity() {
         overlay = findViewById(R.id.boundingBoxOverlay)
         fpsView = findViewById(R.id.fpsVal)
         latencyView = findViewById(R.id.latencyVal)
+        ramView = findViewById(R.id.ramVal)
 
-        // Ensure this matches your file name in assets exactly
-        detector = CamouflageDetector(this, "yolov8n_int8.tflite")
+        detector = CamouflageDetector(this, "yolov8n_float32.tflite")
 
         if (allPermissionsGranted()) startCamera()
         else requestPermissions(arrayOf(android.Manifest.permission.CAMERA), 101)
@@ -59,29 +63,38 @@ class MainActivity : AppCompatActivity() {
     private fun processFrame(imageProxy: ImageProxy) {
         val start = System.nanoTime()
         try {
-            // FIX: Rotating the hardware sensor pixels 90 degrees to be upright
-            val bitmap = imageProxyToBitmap(imageProxy)
-            val resized = Bitmap.createScaledBitmap(bitmap, 640, 640, true)
-
-            val boxes = detector?.runInference(resized) ?: emptyList()
+            val boxes = detector?.runInference(imageProxy) ?: emptyList()
             val latency = (System.nanoTime() - start) / 1_000_000.0
 
-            runOnUiThread {
-                latencyView.text = String.format("%.1f ms", latency)
-                fpsView.text = String.format("%.1f FPS", 1000.0 / latency)
-                overlay.setResults(boxes)
+            frameCount++
+            val currentTime = System.currentTimeMillis()
+            var updateMetricsUI = false
+
+            if (currentTime - lastFpsTimestamp >= 1000) {
+                currentFps = frameCount
+                frameCount = 0
+                lastFpsTimestamp = currentTime
+                updateMetricsUI = true
             }
-        } finally { imageProxy.close() }
-    }
 
-    private fun imageProxyToBitmap(image: ImageProxy): Bitmap {
-        val buffer = image.planes[0].buffer
-        val bitmap = Bitmap.createBitmap(image.width, image.height, Bitmap.Config.ARGB_8888)
-        bitmap.copyPixelsFromBuffer(buffer)
+            runOnUiThread {
+                if (updateMetricsUI) {
+                    // BERSERKER: Correctly fetch RAM here and assign it
+                    val runtime = Runtime.getRuntime()
+                    val usedMemMb = (runtime.totalMemory() - runtime.freeMemory()) / (1024 * 1024)
 
-        // Dynamic transformation based on device sensor rotation
-        val matrix = Matrix().apply { postRotate(image.imageInfo.rotationDegrees.toFloat()) }
-        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+                    latencyView.text = String.format("%.1f ms", latency)
+                    fpsView.text = "$currentFps FPS"
+                    ramView.text = "$usedMemMb MB"
+                }
+                overlay.setResults(boxes)
+                overlay.invalidate()
+            }
+        } catch (e: Exception) {
+            Log.e("MLPerf_Terminal", "Inference Error: ${e.message}")
+        } finally {
+            imageProxy.close()
+        }
     }
 
     private fun allPermissionsGranted() = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == 0

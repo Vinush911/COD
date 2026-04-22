@@ -1,161 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0A0A0A">
+    tools:context=".MainActivity">
 
-    <!-- CAMERA PREVIEW -->
     <androidx.camera.view.PreviewView
         android:id="@+id/viewFinder"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:scaleType="fillCenter"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-    <!-- CUSTOM OVERLAY (IMPORTANT: NOT plain View) -->
     <com.example.codbenchmarker.OverlayView
         android:id="@+id/boundingBoxOverlay"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent" />
 
-    <!-- TOP STATUS -->
+    <!-- Metrics Overlay at the Bottom -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="SYSTEM STATUS: OPERATIONAL"
-            android:textColor="#00FF41"
-            android:fontFamily="monospace"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/modelNameText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="MODEL: YOLOv8_COD_INT8"
-            android:textColor="#00FF41"
-            android:fontFamily="monospace"
-            android:textStyle="bold"
-            android:textSize="18sp" />
-    </LinearLayout>
-
-    <!-- BOTTOM HUD -->
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:columnCount="2"
-        android:padding="20dp"
-        android:layout_marginBottom="40dp"
+        android:background="#80000000"
+        android:orientation="horizontal"
+        android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
-            android:layout_width="150dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="10dp">
-
+            android:layout_weight="1"
+            android:orientation="vertical">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="LATENCY"
-                android:textColor="#80FFFFFF"
-                android:textSize="10sp"/>
-
+                android:textColor="#AAAAAA"
+                android:textSize="12sp" />
             <TextView
                 android:id="@+id/latencyVal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="-- ms"
                 android:textColor="#FFFFFF"
-                android:textSize="24sp"
-                android:textStyle="bold"/>
+                android:textSize="20sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="150dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="10dp">
-
+            android:layout_weight="1"
+            android:orientation="vertical">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="FPS"
-                android:textColor="#80FFFFFF"
-                android:textSize="10sp"/>
-
+                android:textColor="#AAAAAA"
+                android:textSize="12sp" />
             <TextView
                 android:id="@+id/fpsVal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="--.0"
-                android:textColor="#00FF41"
-                android:textSize="24sp"
-                android:textStyle="bold"/>
+                android:text="-- FPS"
+                android:textColor="#00FF00"
+                android:textSize="20sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="150dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="10dp">
-
+            android:layout_weight="1"
+            android:orientation="vertical">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="RAM USAGE"
-                android:textColor="#80FFFFFF"
-                android:textSize="10sp"/>
-
+                android:textColor="#AAAAAA"
+                android:textSize="12sp" />
             <TextView
-                android:id="@+id/memVal"
+                android:id="@+id/ramVal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="-- MB"
                 android:textColor="#FFFFFF"
-                android:textSize="24sp"
-                android:textStyle="bold"/>
+                android:textSize="20sp"
+                android:textStyle="bold" />
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="10dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="THREADS"
-                android:textColor="#80FFFFFF"
-                android:textSize="10sp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="4 (ACTIVE)"
-                android:textColor="#FFFFFF"
-                android:textSize="24sp"
-                android:textStyle="bold"/>
-        </LinearLayout>
-
-    </GridLayout>
-
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

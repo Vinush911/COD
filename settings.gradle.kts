@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "CodBenchmarker"
 include(":app")
+include (":opencv")

@@ -5,46 +5,40 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 
-class OverlayView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
+class OverlayView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
-    private val boxPaint = Paint().apply {
-        color = Color.parseColor("#00FF41") // Tactical Green
-        strokeWidth = 8f
+    private var results: List<Detection> = emptyList()
+
+    private val paint = Paint().apply {
+        color = Color.GREEN
+        strokeWidth = 6f
         style = Paint.Style.STROKE
     }
 
     private val textPaint = Paint().apply {
-        color = Color.parseColor("#00FF41")
-        textSize = 42f
-        typeface = Typeface.MONOSPACE
+        color = Color.GREEN
+        textSize = 50f
         style = Paint.Style.FILL
-        setShadowLayer(5f, 2f, 2f, Color.BLACK)
     }
 
-    private var boxes: List<RectF> = emptyList()
-
-    fun setResults(newBoxes: List<RectF>) {
-        boxes = newBoxes
+    fun setResults(newResults: List<Detection>) {
+        results = newResults
         invalidate()
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        // COORDINATE SCALING: 640 AI Pixels -> Physical Screen Pixels
-        val scaleX = width.toFloat() / 640f
-        val scaleY = height.toFloat() / 640f
-
-        for (box in boxes) {
-            val mappedBox = RectF(
-                box.left * scaleX,
-                box.top * scaleY,
-                box.right * scaleX,
-                box.bottom * scaleY
+        for (det in results) {
+            val rect = RectF(
+                det.box.left * width,
+                det.box.top * height,
+                det.box.right * width,
+                det.box.bottom * height
             )
 
-            canvas.drawRect(mappedBox, boxPaint)
-            canvas.drawText("CAM_TARGET", mappedBox.left, mappedBox.top - 15f, textPaint)
+            canvas.drawRect(rect, paint)
+            canvas.drawText(det.label, rect.left, rect.top - 10, textPaint)
         }
     }
 }

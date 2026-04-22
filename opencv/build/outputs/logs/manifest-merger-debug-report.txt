@@ -1,0 +1,16 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/vinushkumar/StudioProjects/CodBenchmarker/opencv/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest6372813273844130238.xml:2:13-83
+INJECTED from /Users/vinushkumar/StudioProjects/CodBenchmarker/opencv/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest6372813273844130238.xml:2:13-83
+	package
+		INJECTED from /Users/vinushkumar/StudioProjects/CodBenchmarker/opencv/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest6372813273844130238.xml
+	xmlns:android
+		ADDED from /Users/vinushkumar/StudioProjects/CodBenchmarker/opencv/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest6372813273844130238.xml:2:23-81
+uses-sdk
+INJECTED from /Users/vinushkumar/StudioProjects/CodBenchmarker/opencv/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest6372813273844130238.xml reason: use-sdk injection requested
+INJECTED from /Users/vinushkumar/StudioProjects/CodBenchmarker/opencv/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest6372813273844130238.xml
+INJECTED from /Users/vinushkumar/StudioProjects/CodBenchmarker/opencv/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest6372813273844130238.xml
+	android:targetSdkVersion
+		INJECTED from /Users/vinushkumar/StudioProjects/CodBenchmarker/opencv/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest6372813273844130238.xml
+	android:minSdkVersion
+		INJECTED from /Users/vinushkumar/StudioProjects/CodBenchmarker/opencv/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest6372813273844130238.xml
